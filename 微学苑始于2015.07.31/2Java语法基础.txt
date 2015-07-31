@@ -1,0 +1,135 @@
+Java中共有8种基本数据类型，包括4 种整型、2 种浮点型、1 种字符型、1 种布尔型，请见下表。
+Java基本数据类型
+数据类型	说明	所占内存	举例	备注
+byte	字节型	1 byte	3, 127	 
+short	短整型	2 bytes	3, 32767	 
+int	整型	4 bytes	3, 21474836	 
+long	长整型	8 bytes	3L, 92233720368L	long最后要有一个L字母（大小写无所谓）。
+float	单精度浮点型	4 bytes	1.2F, 223.56F	float最后要有一个F字母（大小写无所谓）。
+double	双精度浮点型	8 bytes	1.2, 1.2D, 223.56, 223.56D	double最后最好有一个D字母（大小写无所谓）。
+char	字符型	2 bytes	'a', ‘A’	字符型数据只能是一个字符，由单引号包围。
+boolean	布尔型	1 bit	true, false	 
+
+
+
+注意：不带任何标志的浮点型数据，系统默认是 double 类型。
+
+
+
+
+
+自动转换按从低到高的顺序转换。不同类型数据间的优先关系如下：
+    低--------------------------------------------->高
+    byte,short,char-> int -> long -> float -> double
+
+运算中，不同类型的数据先转化为同一类型，然后进行运算，转换规则如下：
+操作数1类型				操作数2类型	转换后的类型
+byte、short、char			int		int
+byte、short、char、int			long		long
+byte、short、char、int、		long		float	float
+byte、short、char、int、long、float	double		double
+强制数据类型转换
+
+强制转换的格式是在需要转型的数据前加上“( )”，然后在括号内加入需要转化的数据类型。有的数据经过转型运算后，精度会丢失，而有的会更加精确，下面的例子可以说明这个问题。
+public class Demo {
+    public static void main(String[] args){
+        int x;
+        double y;
+        x = (int)34.56 + (int)11.2;  // 丢失精度
+        y = (double)x + (double)10 + 1;  // 提高精度
+        System.out.println("x=" + x);
+        System.out.println("y=" + y);
+    }
+}
+运行结果：
+x=45
+y=56.0
+
+
+
+
+Java中也有 printf() 语句，用来控制输出格式，不过实际开发中不常用，因为输出到控制台的数据很少要求严格的格式，一般 println() 和 print() 就够了。
+
+println() 输出内容后换行，print() 不换行。
+
+
+
+
+Java 中定义数组的语法有两种：
+    type arrayName[];
+    type[] arrayName;
+与C、C++不同，Java在定义数组时并不为数组元素分配内存，因此[ ]中无需指定数组元素的个数，即数组长度。而且对于如上定义的一个数组是不能访问它的任何元素的，我们必须要为它分配内存空间，这时要用到运算符new，其格式如下：
+    arrayName=new type[arraySize];
+
+不过，Java提供了”增强版“的for循环，专门用来遍历数组，语法为：
+for( arrayType varName: arrayName ){
+    // Some Code
+}
+
+
+
+
+二维数组的声明、初始化和引用与一维数组相似：
+int intArray[ ][ ] = { {1,2}, {2,3}, {4,5} };
+int a[ ][ ] = new int[2][3];
+
+Java语言中，由于把二维数组看作是数组的数组，数组空间不是连续分配的，所以不要求二维数组每一维的大小相同。例如
+int intArray[ ][ ] = { {1,2}, {2,3}, {3,4,5} };
+int a[ ][ ] = new int[2][ ];
+a[0] = new int[3];
+a[1] = new int[5];
+
+正是由于静态数组容量固定的缺点，实际开发中使用频率不高，被 ArrayList 或 Vector 代替，因为实际开发中经常需要向数组中添加或删除元素，而它的容量不好预估。
+
+
+
+字符串可以通过“+”连接，基本数据类型与字符串进行“+”操作一般也会自动转换为字符串
+String字符串与数组有一个共同点，就是它们被初始化后，长度是不变的，并且内容也不变。如果要改变它的值，就会产生一个新的字符串，如下所示：
+String str = "Hello ";
+str += "World!";
+
+实际上，String 是java.lang包下的一个类，按照标准的面向对象的语法，其格式应该为：
+String stringName = new String("string content");
+但是由于String特别常用，所以Java提供了一种简化的语法。
+使用简化语法的另外一个原因是，按照标准的面向对象的语法，在内存使用上存在比较大的浪费。例如String str = new String(“abc”);实际上创建了两个String对象，一个是”abc”对象，存储在常量空间中，一个是使用new关键字为对象str申请的空间。
+
+
+字符串操作
+String对象有很多方法，可以方便的操作字符串。
+1) length() 方法
+2) charAt() 方法
+3) contains() 方法  contains() 方法用来检测字符串是否包含某个子串
+4) replace() 方法   字符串替换，用来替换字符串中所有指定的子串
+5) split() 方法    以指定字符串作为分隔符，对当前字符串进行分割，分割的结果是一个数组
+
+
+String 的值是不可变的，每次对String的操作都会生成新的String对象，不仅效率低，而且耗费大量内存空间。
+
+StringBuffer 默认分配16字节长度的缓冲区，当字符串超过该大小时，会自动增加缓冲区长度，而不是生成新的对象。
+StringBuffer不像String，只能通过 new 来创建对象，不支持简写方式，例如：
+StringBuffer str1 = new StringBuffer();  // 分配16个字节长度的缓冲区
+StringBuffer str2 = =new StringBuffer(512);  // 分配512个字节长度的缓冲区
+// 在缓冲区中存放了字符串，并在后面预留了16个字节长度的空缓冲区
+StringBuffer str3 = new StringBuffer("www.weixueyuan.net");
+
+
+StringBuffer类的主要方法
+StringBuffer类中的方法主要偏重于对于字符串的操作，例如追加、插入和删除等，这个也是StringBuffer类和String类的主要区别。实际开发中，如果需要对一个字符串进行频繁的修改，建议使用 StringBuffer。
+1) append() 方法
+2) deleteCharAt()
+3) insert() 方法
+4) setCharAt() 方法
+
+
+StringBuilder类
+StringBuilder类和StringBuffer类功能基本相似，方法也差不多，主要区别在于StringBuffer类的方法是多线程安全的，而StringBuilder不是线程安全的，相比而言，StringBuilder类会略微快一点。
+StringBuffer、StringBuilder、String中都实现了CharSequence接口。
+CharSequence是一个定义字符串操作的接口，它只包括length()、charAt(int index)、subSequence(int start, int end) 这几个API。
+
+使用环境：
+操作少量的数据使用 String；
+单线程操作大量数据使用 StringBuilder；
+多线程操作大量数据使用 StringBuffer。
+
+
+
