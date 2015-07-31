@@ -1,0 +1,224 @@
+单继承性：Java 允许一个类仅能继承一个其它类，即一个类只能有一个父类，这个限制被称做单继承性。后面将会学到接口(interface)的概念，接口允许多继承。
+
+
+
+注意：构造方法不能被继承，掌握这一点很重要。 一个类能得到构造方法，只有两个办法：编写构造方法，或者根本没有构造方法，类有一个默认的构造方法。
+
+
+super 关键字与 this 类似，this 用来表示当前类的实例，super 用来表示父类。
+super 可以用在子类中，通过点号(.)来获取父类的成员变量和方法。super 也可以用在子类的子类中，Java 能自动向上层类追溯。
+
+
+super 关键字的功能：
+调用父类中声明为 private 的变量。
+点取已经覆盖了的方法。
+作为方法名表示父类构造方法。
+
+
+调用父类的构造方法
+class Animal{
+    String name;
+    public Animal(String name){
+        this.name = name;
+    }
+}
+class Dog extends Animal{
+    int age;
+    public Dog(String name, int age){
+        super(name);
+        this.age = age;
+    }
+
+
+注意：无论是 super() 还是 this()，都必须放在构造方法的第一行。
+
+
+值得注意的是：
+在构造方法中调用另一个构造方法，调用动作必须置于最起始的位置。
+不能在构造方法以外的任何方法内调用构造方法。
+在一个构造方法内只能调用一个构造方法。
+
+如果编写一个构造方法，既没有调用 super() 也没有调用 this()，编译器会自动插入一个调用到父类构造方法中，而且不带参数。 
+
+最后注意 super 与 this 的区别：super 不是一个对象的引用，不能将 super 赋值给另一个对象变量，它只是一个指示编译器调用父类方法的特殊关键字。 
+
+
+
+（以下覆盖和重载和C++不同）
+方法覆盖的原则：
+覆盖方法的返回类型、方法名称、参数列表必须与原方法的相同。
+覆盖方法不能比原方法访问性差（即访问权限不允许缩小）。
+覆盖方法不能比原方法抛出更多的异常。
+被覆盖的方法不能是final类型，因为final修饰的方法是无法覆盖的。
+被覆盖的方法不能为private，否则在其子类中只是新定义了一个方法，并没有对其进行覆盖。
+被覆盖的方法不能为static。如果父类中的方法为静态的，而子类中的方法不是静态的，但是两个方法除了这一点外其他都满足覆盖条件，那么会发生编译错误；反之亦然。即使父类和子类中的方法都是静态的，并且满足覆盖条件，但是仍然不会发生覆盖，因为静态方法是在编译的时候把静态方法和类的引用类型进行匹配。
+
+方法的重载：
+前面已经对Java方法重载进行了说明，这里再强调一下，Java父类和子类中的方法都会参与重载，例如，父类中有一个方法是 func(){ ... }，子类中有一个方法是 func(int i){ ... }，就构成了方法的重载。
+
+覆盖和重载的不同：
+方法覆盖要求参数列表必须一致，而方法重载要求参数列表必须不一致。
+方法覆盖要求返回类型必须一致，方法重载对此没有要求。
+方法覆盖只能用于子类覆盖父类的方法，方法重载用于同一个类中的所有方法（包括从父类中继承而来的方法）。
+方法覆盖对方法的访问权限和抛出的异常有特殊的要求，而方法重载在这方面没有任何限制。
+父类的一个方法只能被子类覆盖一次，而一个方法可以在所有的类中可以被重载多次。
+
+
+
+（c++里要加virtual，java不用）
+多态存在的三个必要条件：要有继承、要有重写、父类变量引用子类对象。
+
+当使用多态方式调用方法时：
+首先检查父类中是否有该方法，如果没有，则编译错误；如果有，则检查子类是否覆盖了该方法。
+如果子类覆盖了该方法，就调用子类的方法，否则调用父类方法。
+
+
+
+
+多态性带来了一个问题，就是如何判断一个变量所实际引用的对象的类型 。 C++使用runtime-type information(RTTI)，Java 使用 instanceof 操作符。
+instanceof 运算符用来判断一个变量所引用的对象的实际类型，注意是它引用的对象的类型，不是变量的类型。
+if(obj instanceof Object){
+            System.out.println("我是一个对象");
+        }
+if(obj instanceof People){
+            System.out.println("我是人类");
+        }
+
+
+
+
+这里所说的对象类型转换，是指存在继承关系的对象，不是任意类型的对象。当对不存在继承关系的对象进行强制类型转换时，java 运行时将抛出 java.lang.ClassCastException 异常。
+
+注意：不能直接将父类的对象强制转换为子类类型，只能将向上转型后的子类对象再次转换为子类类型。也就是说，子类对象必须向上转型后，才能再向下转型。请看下面的代码：
+
+
+
+因为向下转型存在风险，所以在接收到父类的一个引用时，请务必使用 instanceof 运算符来判断该对象是否是你所要的子类，请看下面的代码：
+public class Demo {
+    public static void main(String args[]) {
+        SuperClass superObj = new SuperClass();
+        SonClass sonObj = new SonClass();
+        // superObj 不是 SonClass 类的实例
+        if(superObj instanceof SonClass){
+            SonClass sonObj1 = (SonClass)superObj;
+        }else{
+            System.out.println("①不能转换");
+        }
+        superObj = sonObj;
+        // superObj 是 SonClass 类的实例
+        if(superObj instanceof SonClass){
+            SonClass sonObj2 = (SonClass)superObj;
+        }else{
+            System.out.println("②不能转换");
+        }
+    }
+}
+class SuperClass{ }
+class SonClass extends SuperClass{ }
+
+
+
+static 修饰符能够与变量、方法一起使用，表示是“静态”的。
+public class Demo {
+    static int i = 10;//直接赋值，和C++不同
+    int j;
+    }
+ System.out.println("类变量 i=" + Demo.i);
+注意：静态变量虽然也可以通过对象来访问，但是不被提倡，编译器也会产生警告。
+
+
+
+关于静态变量和静态方法的总结：
+一个类的静态方法只能访问静态变量；
+一个类的静态方法不能够直接调用非静态方法；
+如访问控制权限允许，静态变量和静态方法也可以通过对象来访问，但是不被推荐；
+静态方法中不存在当前对象，因而不能使用 this，当然也不能使用 super；
+静态方法不能被非静态方法覆盖；
+构造方法不允许声明为 static 的；
+局部变量不能使用static修饰。
+
+
+
+静态初始器（静态块）
+块是由大括号包围的一段代码。静态初始器(Static Initializer)是一个存在于类中、方法外面的静态块。静态初始器仅仅在类装载的时候（第一次使用类的时候）执行一次，往往用来初始化静态变量。
+示例代码：
+
+public class Demo {
+    public static int i;
+    static{
+        i = 10;
+        System.out.println("Now in static block.");
+    }
+    public void test() {
+        System.out.println("test method: i=" + i);
+    }
+    public static void main(String[] args) {
+        System.out.println("Demo.i=" + Demo.i);
+        new Demo().test();
+    }
+}
+
+
+
+
+
+而静态导入可以这样写：
+import static packageName.className.methonName;  // 导入某个特定的静态方法
+或
+import static packageName.className.*;  // 导入类中的所有静态成员
+
+
+
+
+在 Java 中，声明类、变量和方法时，可使用关键字 final 来修饰。final 所修饰的数据具有“终态”的特征，表示“最终的”意思。具体规定如下：
+final 修饰的类不能被继承。
+final 修饰的方法不能被子类重写。
+final 修饰的变量（成员变量或局部变量）即成为常量，只能赋值一次。
+final 修饰的成员变量必须在声明的同时赋值，如果在声明的时候没有赋值，那么只有 一次赋值的机会，而且只能在构造方法中显式赋值，然后才能使用。
+final 修饰的局部变量可以只声明不赋值，然后再进行一次性的赋值。
+
+
+
+在Java中，被 static 或 private 修饰的方法会被隐式的声明为 final，因为动态绑定没有意义。
+
+由于动态绑定会消耗资源并且很多时候没有必要，所以有一些程序员认为：除非有足够的理由使用多态性，否则应该将所有的方法都用 final 修饰。
+
+
+Object 类位于 java.lang 包中，是所有 Java 类的祖先，Java 中的每个类都由它扩展而来。
+定义Java类时如果没有显示的指明父类，那么就默认继承了 Object 类。例如：
+public class Demo{
+    // ...
+}
+实际上是下面代码的简写形式：
+public class Demo extends Object{
+    // ...
+}
+在Java中，只有基本类型不是对象，例如数值、字符和布尔型的值都不是对象，所有的数组类型，不管是对象数组还是基本类型数组都是继承自 Object 类。
+Object 类定义了一些有用的方法，由于是根类，这些方法在其他类中都存在，一般是进行了重载或覆盖，实现了各自的具体功能。
+
+
+
+equals() 方法
+Object 类中的 equals() 方法用来检测一个对象是否等价于另外一个对象，语法为：
+    public boolean equals(Object obj)
+例如：
+obj1.equals(obj2);
+
+
+hashCode() 方法
+散列码(hashCode)是按照一定的算法由对象得到的一个数值，散列码没有规律。如果 x 和 y 是不同的对象，x.hashCode() 与 y.hashCode() 基本上不会相同。
+hashCode() 方法主要用来在集合中实现快速查找等操作，也可以用于对象的比较。
+
+
+
+toString() 方法
+toString() 方法是 Object 类中定义的另一个重要方法，是对象的字符串表现形式，语法为：
+    public String toString()
+返回值是 String 类型，用于描述当前对象的有关信息。Object 类中实现的 toString() 方法是返回当前对象的类型和内存地址信息，但在一些子类（如 String、Date 等）中进行了 重写，也可以根据需要在用户自定义类型中重写 toString() 方法，以返回更适用的信息。
+
+除显式调用对象的 toString() 方法外，在进行 String 与其它类型数据的连接操作时，会自动调用 toString() 方法。
+
+
+
+
+
