@@ -1,0 +1,117 @@
+JVM也是一个软件，不同的平台有不同的版本。我们编写的Java源码，编译后会生成一种 .class 文件，称为字节码文件。Java虚拟机就是负责将字节码文件翻译成特定平台下的机器码然后运行。也就是说，只要在不同平台上安装对应的JVM，就可以运行字节码文件，运行我们编写的Java程序。
+
+
+JVM是一个”桥梁“，是一个”中间件“，是实现跨平台的关键，Java代码首先被编译成字节码文件，再由JVM将字节码文件翻译成机器语言，从而达到运行Java程序的目的。
+
+
+注意：编译的结果不是生成机器码，而是生成字节码，字节码不能直接运行，必须通过JVM翻译成机器码才能运行。不同平台下编译生成的字节码是一样的，但是由JVM翻译成的机器码却不一样。
+
+
+注意：跨平台的是Java程序，不是JVM。JVM是用C/C++开发的，是编译后的机器码，不能跨平台，不同平台下需要安装不同版本的JVM。
+
+
+
+Java 有三个版本，分别为 J2SE、J2EE和J2ME，以下是详细介绍。
+J2SE(Java 2 Platform Standard Edition) 标准版
+
+J2SE是Java的标准版，主要用于开发客户端（桌面应用软件）
+J2SE包含了Java的核心类库，例如数据库连接、接口定义、输入/输出、网络编程等。
+
+学习Java编程就是从J2SE入手。
+J2EE(Java 2 Platform Enterprise Edition) 企业版
+J2EE是功能最丰富的一个版本，主要用于开发高访问量、大数据量、高并发量的网站，例如美团、去哪儿网的后台都是J2EE。通常所说的JSP开发就是J2EE的一部分。
+J2EE包含J2SE中的类，还包含用于开发企业级应用的类，例如EJB、servlet、JSP、XML、事务控制等。
+J2EE也可以用来开发技术比较庞杂的管理软件，例如ERP系统（Enterprise Resource Planning，企业资源计划系统）。
+J2ME(Java 2 Platform Micro Edition) 微型版
+
+J2ME 只包含J2SE中的一部分类，受平台影响比较大，主要用于嵌入式系统和移动平台的开发，例如呼机、智能卡、手机（功能机）、机顶盒等。
+在智能手机还没有进入公众视野的时候，你是否还记得你的摩托罗拉、诺基亚手机上有很多Java小游戏吗？这就是用J2ME开发的。
+
+
+
+注意：Android手机有自己的开发组件，不使用J2ME进行开发。
+
+
+JDK（Java Development Kit，Java开发工具箱）。
+JDK 是一系列工具的集合，这些工具是编译Java源码、运行Java程序所必需的，例如JVM、基础类库、编译器、打包工具等。不论是什么样的 Java 应用服务器，都是内置了某个版本的 JDK，因此掌握 JDK 是学好 Java 的第一步。
+
+JDK所提供的部分工具：
+java编译器：javac.exe
+java解释器：java.exe
+java文档生成器：javadoc.exe
+java调试器：jdb.exe
+
+JVM（Java Virtual Machine）
+JRE（Java Runtime Environment，Java运行环境），运行JAVA程序所必须的环境的集合，包含JVM标准实现及Java核心类库。
+
+
+控制台上：
+G:\java_kit\eclipse\eclipse\workspace\first\src>javac Myone.java
+G:\java_kit\eclipse\eclipse\workspace\first\src>java Myone
+Hello World!
+G:\java_kit\eclipse\eclipse\workspace\first\src>
+
+
+
+
+定义了一个类，类是 “public” 公共类型的，类名为“HelloWorld”。另外，Java 中主类名应该和要保存的 Java 文件名相同，也就是说，这里定义的类名是“HelloWorld”，则文件应该保存为“HelloWorld.java”。
+ public static void main(String[] args)
+
+
+在Java中，可以将完成某个功能的代码块定义为方法，将具有相似功能的方法定义在一个类中，也就是定义在一个源文件中（因为一个源文件只能包含一个公共的类），多个源文件可以位于一个文件夹，这个文件夹有特定的称呼，叫做包。
+
+
+
+我也不希望你看到我的代码（你也没必要也不希望读懂这些晦涩的代码），我要保护我的版权，怎么办呢？
+我可以先将我的类编译，并附带一个文档，告诉你我的类怎么使用，有哪些方法和属性，你只需要按照文档的说明来调用就完全没问题，既节省了你阅读代码的时间，也保护了我的版权。例如，获取CPU信息的方法：
+    getCpuInfo(int cpuType);
+这就是一个API。也就是说，该文档中描述的类的使用方法，就叫做API。
+
+
+
+Java API也有一个说明文档，入口地址：http://www.oracle.com/technetwork/java/api
+
+
+
+Java类库中有很多包：
+以 java.* 开头的是Java的核心包，所有程序都会使用这些包中的类；
+以 javax.* 开头的是扩展包，x 是 extension 的意思，也就是扩展。虽然 javax.* 是对 java.* 的优化和扩展，但是由于 javax.* 使用的越来越多，很多程序都依赖于 javax.*，所以 javax.* 也是核心的一部分了，也随JDK一起发布。
+以 org.* 开头的是各个机构或组织发布的包，因为这些组织很有影响力，它们的代码质量很高，所以也将它们开发的部分常用的类随JDK一起发布。
+
+在包的命名方面，为了防止重名，有一个惯例：大家都以自己域名的倒写形式作为开头来为自己开发的包命名，例如百度发布的包会以 com.baidu.* 开头，w3c组织发布的包会以 org.w3c.* 开头，微学苑发布的包会以 net.weixueyuan.* 开头……
+
+
+
+
+java中常用的几个包介绍：
+包名	说明
+java.lang	该包提供了Java编程的基础类，例如 Object、Math、String、StringBuffer、System、Thread等，不使用该包就很难编写Java代码了。
+java.util	该包提供了包含集合框架、遗留的集合类、事件模型、日期和时间实施、国际化和各种实用工具类（字符串标记生成器、随机数生成器和位数组）。
+java.io	该包通过文件系统、数据流和序列化提供系统的输入与输出。
+java.net	该包提供实现网络应用与开发的类。
+java.sql	该包提供了使用Java语言访问并处理存储在数据源（通常是一个关系型数据库）中的数据API。
+java.awt	这两个包提供了GUI设计与开发的类。java.awt包提供了创建界面和绘制图形图像的所有类，而javax.swing	   包提供了一组“轻量级”的组件，尽量让这些组件在所有平台上的工作方式相同。
+java.text	提供了与自然语言无关的方式来处理文本、日期、数字和消息的类和接口。
+
+
+import语句与C语言中的 #include 有些类似，语法为：
+    import package1[.package2…].classname;
+package 为包名，classname 为类名。例如：
+
+import java.util.Date;  // 导入 java.util 包下的 Date 类
+import java.util.Scanner;  // 导入 java.util 包下的 Scanner 类
+import javax.swing.*;  // 导入 javax.swing 包下的所有类，* 表示所有类
+
+注意：
+import 只能导入包所包含的类，而不能导入包。
+为方便起见，我们一般不导入单独的类，而是导入包下所有的类，例如 import java.util.*;。
+
+
+Java 运行环境将依次到下面的路径寻找并载入字节码文件 Test.class：
+.p1\Test.class（"."表示当前路径）
+.安装JDK时，我们已经设置了环境变量 CLASSPATH 来指明类库的路径。
+
+
+
+
+
