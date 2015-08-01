@@ -1,0 +1,121 @@
+Java异常处理通过5个关键字控制：try、catch、throw、throws和 finally。下面讲述它们如何工作的。程序声明了你想要的异常监控包含在一个try块中。如果在try块中发生异常，它被抛出。你的代码可以捕捉这个异常（用catch）并且用某种合理的方法处理该异常。系统产生的异常被Java运行时系统自动抛出。手动抛出一个异常，用关键字throw。任何被抛出方法的异常都必须通过throws子句定义。任何在方法返回前绝对被执行的代码被放置在finally块中。
+
+
+所有异常类型都是内置类Throwable的子类。因此，Throwable在异常类层次结构的顶层。紧接着Throwable下面的是两个把异常分成两个不同分支的子类。一个分支是Exception。
+该类用于用户程序可能捕捉的异常情况。它也是你可以用来创建你自己用户异常类型子类的类。在Exception分支中有一个重要子类RuntimeException。该类型的异常自动为你所编写的程序定义并且包括被零除和非法数组索引这样的错误。
+
+另一类分支由Error作为顶层，Error定义了在通常环境下不希望被程序捕获的异常。Error类型的异常用于Java运行时系统来显示与运行时系统本身有关的错误。堆栈溢出是这种错误的一例。本章将不讨论关于Error类型的异常处理，因为它们通常是灾难性的致命错误，不是你的程序可以控制的。
+
+
+
+显示一个异常的描述
+Throwable重载toString( )方法（由Object定义），所以它返回一个包含异常描述的字符串。你可以通过在println( )中传给异常一个参数来显示该异常的描述。例如，前面程序的catch块可以被重写成
+catch (ArithmeticException e) {
+    System.out.println("Exception: " + e);
+    a = 0; // set a to zero and continue
+}
+
+当这个版本代替原程序中的版本，程序在标准javaJDK解释器下运行，每一个被零除错误显示下面的消息：
+    Exception: java.lang.ArithmeticException: / by zero
+
+
+Try语句可以被嵌套。也就是说，一个try语句可以在另一个try块内部。每次进入try语句，异常的前后关系都会被推入堆栈。如果一个内部的try语句不含特殊异常的catch处理程序，堆栈将弹出，下一个try语句的catch处理程序将检查是否与之匹配。这个过程将继续直到一个catch语句匹配成功，或者是直到所有的嵌套try语句被检查耗尽。如果没有catch语句匹配，Java的运行时系统将处理这个异常。
+
+
+到目前为止，你只是获取了被Java运行时系统抛出的异常。然而，程序可以用throw语句抛出明确的异常。Throw语句的通常形式如下：
+    throw ThrowableInstance;
+throw new NullPointerException("demo");
+
+
+
+
+如果一个方法可以导致一个异常但不处理它，它必须指定这种行为以使方法的调用者可以保护它们自己而不发生异常。做到这点你可以在方法声明中包含一个throws子句。一个 throws 子句列举了一个方法可能抛出的所有异常类型。这对于除Error或RuntimeException及它们子类以外类型的所有异常是必要的。一个方法可以抛出的所有其他类型的异常必须在throws子句中声明。如果不这样做，将会导致编译错误。
+
+下面是包含一个throws子句的方法声明的通用形式：
+type method-name(parameter-list) throws exception-list{
+    // body of method
+}
+
+
+
+finally创建一个代码块。该代码块在一个try/catch 块完成之后另一个try/catch出现之前执行。finally块无论有没有异常抛出都会执行。
+
+
+
+Java定义了几种与不同类库相关的其他的异常类型。
+
+表 10-1 Java 的 java.lang 中定义的未检查异常子类
+异常	说明
+ArithmeticException	算术错误，如被0除
+ArrayIndexOutOfBoundsException	数组下标出界
+ArrayStoreException	数组元素赋值类型不兼容
+ClassCastException	非法强制转换类型
+IllegalArgumentException	调用方法的参数非法
+IllegalMonitorStateException	非法监控操作，如等待一个未锁定线程
+IllegalStateException	环境或应用状态不正确
+IllegalThreadStateException	请求操作与当前线程状态不兼容
+IndexOutOfBoundsException	某些类型索引越界
+NullPointerException	非法使用空引用
+NumberFormatException	字符串到数字格式非法转换
+SecurityException	试图违反安全性
+StringIndexOutOfBounds	试图在字符串边界之外索引
+UnsupportedOperationException	遇到不支持的操作
+
+表 10-2  java.lang 中定义的检查异常
+异常	意义
+ClassNotFoundException	找不到类
+CloneNotSupportedException	试图克隆一个不能实现Cloneable接口的对象
+IllegalAccessException	对一个类的访问被拒绝
+InstantiationException	试图创建一个抽象类或者抽象接口的对象
+InterruptedException	一个线程被另一个线程中断
+NoSuchFieldException	请求的字段不存在
+NoSuchMethodException	请求的方法不存在
+
+
+
+
+Exception类自己没有定义任何方法。当然，它继承了Throwable提供的一些方法。因此，所有异常，包括你创建的，都可以获得Throwable定义的方法。这些方法显示在表10-3中。你还可以在你创建的异常类中覆盖一个或多个这样的方法。
+
+表 10-3 Throwable 定义的方法
+方法	描述
+Throwable fillInStackTrace( )	返回一个包含完整堆栈轨迹的Throwable对象，该对象可能被再次引发。
+String getLocalizedMessage( )	返回一个异常的局部描述
+String getMessage( )	返回一个异常的描述
+void printStackTrace( )	显示堆栈轨迹
+void printStackTrace(PrintStreamstream)	把堆栈轨迹送到指定的流
+void printStackTrace(PrintWriterstream)	把堆栈轨迹送到指定的流
+String toString( )	返回一个包含异常描述的String对象。当输出一个Throwable对象时，该方法被println( )调用
+下面的例子声明了Exception的一个新子类，然后该子类当作方法中出错情形的信号。它重载了toString( )方法，这样可以用println( )显示异常的描述。
+// This program creates a custom exception type.
+class MyException extends Exception {
+    private int detail;
+    MyException(int a) {
+        detail = a;
+    }
+
+    public String toString() {
+        return "MyException[" + detail + "]";
+    }
+}
+
+
+
+
+断言的概念
+
+断言用于证明和测试程序的假设，比如“这里的值大于 5”。
+断言可以在运行时从代码中完全删除，所以对代码的运行速度没有影响。
+断言的使用
+
+断言有两种方法：
+一种是 assert<<布尔表达式>> ；
+另一种是 assert<<布尔表达式>> ：<<细节描述>>。
+如果布尔表达式的值为false ， 将抛出AssertionError 异常；
+
+
+运行时屏蔽断言
+
+运行时要屏蔽断言，可以用如下方法：
+    java –disableassertions 或 java –da 类名
+运行时要允许断言，可以用如下方法：
+    java –enableassertions 或 java –ea类名
