@@ -1,0 +1,220 @@
+这段代码定义了一个外部类 Outer，它包含了一个内部类 Inner。将错误语句注释掉，编译，会生成两个 .class 文件：Outer.class 和 Outer$Inner.class。也就是说，内部类会被编译成独立的字节码文件。
+
+内部类是一种编译器现象，与虚拟机无关。编译器将会把内部类翻译成用 $ 符号分隔外部类名与内部类名的常规类文件，而虚拟机则对此一无所知。
+
+
+
+
+成员式内部类
+在外部类内部直接定义（不在方法内部或代码块内部）的类就是成员式内部类，它可以直接使用外部类的所有变量和方法，即使是 private 的。外部类要想访问内部类的成员变量和方法，则需要通过内部类的对象来获取。
+成员式内部类如同外部类的一个普通成员。
+
+
+局部内部类
+局部内部类(Local class)是定义在代码块中的类。它们只在定义它们的代码块中是可见的。
+
+
+
+
+匿名内部类
+匿名内部类是局部内部类的一种特殊形式，也就是没有变量名指向这个类的实例，而且具体的类实现会写在这个内部类里面。
+注意：匿名类必须继承一个父类或实现一个接口。
+
+这个时候就引入了匿名内部类。使用匿名内部类实现：
+abstract class Person {
+    public abstract void eat();
+}
+public class Demo {
+    public static void main(String[] args){
+       
+        // 继承 Person 类
+        new Person() {
+            public void eat() {
+                System.out.println("eat something");
+            }
+        }.eat();
+    }
+}
+可以看到，匿名类继承了 Person 类并在大括号中实现了抽象类的方法。
+
+
+
+这种只给出方法定义而不具体实现的方法被称为抽象方法，抽象方法是没有方法体的，在代码的表达上就是没有“{}”。包含一个或多个抽象方法的类也必须被声明为抽象类。
+
+使用 abstract 修饰符来表示抽象方法和抽象类。
+
+抽象类除了包含抽象方法外，还可以包含具体的变量和具体的方法。类即使不包含抽象方法，也可以被声明为抽象类，防止被实例化。
+
+
+
+
+//串行硬盘接口
+public interface SataHdd{
+    //连接线的数量
+    public static final int CONNECT_LINE=4;
+    //写数据
+    public void writeData(String data);
+    //读数据
+    public String readData();
+}
+
+
+在接口(interface)中，所有的方法必须都是抽象的，不能有方法体，它比抽象类更加“抽象”。
+
+
+但接口有其自身的一些特性，归纳如下。
+1) 接口中只能定义抽象方法，这些方法默认为 public abstract 的，因而在声明方法时可以省略这些修饰符。试图在接口中定义实例变量、非抽象的实例方法及静态方法，都是非法的。
+3) 接口中没有构造方法，不能被实例化。
+4) 一个接口不实现另一个接口，但可以继承多个其他接口。接口的多继承特点弥补了类的单继承。
+
+
+一个类只能继承一个父类，但却可以实现多个接口。
+
+实现接口的格式如下：
+修饰符 class 类名 extends 父类 implements 多个接口 {
+    实现方法
+}
+
+
+
+下面说一下抽象类和接口的主要区别。
+1) 抽象类可以为部分方法提供实现，避免了在子类中重复实现这些方法，提高了代码的可重用性，这是抽象类的优势；而接口中只能包含抽象方法，不能包含任何实现。
+2) 一个类只能继承一个直接的父类（可能是抽象类），但一个类可以实现多个接口，这个就是接口的优势。	
+
+综上所述，接口和抽象类各有优缺点，在接口和抽象类的选择上，必须遵守这样一个原则：
+行为模型应该总是通过接口而不是抽象类定义，所以通常是优先选用接口，尽量少用抽象类。
+选择抽象类的时候通常是如下情况：需要定义子类的行为，又要为子类提供通用的功能。
+
+
+
+使用泛型类(Java Class)，它可以接受任意类型的数据。所谓“泛型”，就是“宽泛的数据类型”，任意的数据类型。
+
+更改上面的代码，使用泛型类：
+public class Demo {
+    public static void main(String[] args){
+        // 实例化泛型类
+        Point<Integer, Integer> p1 = new Point<Integer, Integer>();
+        p1.setX(10);
+        p1.setY(20);
+        int x = p1.getX();
+        int y = p1.getY();
+        System.out.println("This point is：" + x + ", " + y);
+       
+        Point<Double, String> p2 = new Point<Double, String>();
+        p2.setX(25.4);
+        p2.setY("东京180度");
+        double m = p2.getX();
+        String n = p2.getY();
+        System.out.println("This point is：" + m + ", " + n);
+    }
+}
+// 定义泛型类
+class Point<T1, T2>{
+    T1 x;
+    T2 y;
+    public T1 getX() {
+        return x;
+    }
+    public void setX(T1 x) {
+        this.x = x;
+    }
+    public T2 getY() {
+        return y;
+    }
+    public void setY(T2 y) {
+        this.y = y;
+    }
+}
+
+
+
+泛型接口
+在Java中也可以定义泛型接口，这里不再赘述，仅仅给出示例代码：
+//定义泛型接口
+interface Info<T> {
+    public T getVar();
+}
+//实现接口
+class InfoImp<T> implements Info<T> {
+
+
+
+
+因为在使用泛型时没有指明数据类型，为了不出现错误，编译器会将所有数据向上转型为 Object，所以在取出坐标使用时要向下转型，这与本文一开始不使用泛型没什么两样。
+
+
+类型擦除
+如果在使用泛型时没有指明数据类型，那么就会擦除泛型类型，请看下面的代码：
+public class Demo {
+    public static void main(String[] args){
+        Point p = new Point();  // 类型擦除
+        p.setX(10);
+        p.setY(20.8);
+        int x = (Integer)p.getX();  // 向下转型
+        double y = (Double)p.getY();
+        System.out.println("This point is：" + x + ", " + y);
+    }
+}
+
+
+限制泛型的可用类型
+通过 extends 关键字可以限制泛型的类型，改进上面的代码：
+public <T extends Number> T getMax(T array[]){
+    T max = null;
+    for(T element : array){
+        max = element.doubleValue() > max.doubleValue() ? element : max;
+    }
+    return max;
+}
+<T extends Number> 表示 T 只接受 Number 及其子类，传入其他类型的数据会报错。这里的限定使用关键字 extends，后面可以是类也可以是接口。但这里的 extends 已经不是继承的含义了，应该理解为 T 是继承自 Number 类的类型，或者 T 是实现了 XX 接口的类型。
+
+
+
+通配符(?)
+通配符(?)可以表示任意的数据类型。
+public void printPoint(Point<?, ?> p){
+    System.out.println("This point is: " + p.getX() + ", " + p.getY());
+}
+将代码补充完整：
+public class Demo {
+    public static void main(String[] args){
+        Point<Integer, Integer> p1 = new Point<Integer, Integer>();
+        p1.setX(10);
+        p1.setY(20);
+        printPoint(p1);
+      
+        Point<String, String> p2 = new Point<String, String>();
+        p2.setX("东京180度");
+        p2.setY("北纬210度");
+        printPoint(p2);
+    }
+   
+    public static void printPoint(Point<?, ?> p){  // 使用通配符
+        System.out.println("This point is: " + p.getX() + ", " + p.getY());
+    }
+}
+class Point<T1, T2>{
+    T1 x;
+    T2 y;
+    public T1 getX() {
+        return x;
+    }
+    public void setX(T1 x) {
+        this.x = x;
+    }
+    public T2 getY() {
+        return y;
+    }
+    public void setY(T2 y) {
+        this.y = y;
+    }
+}
+运行结果：
+This point is: 10, 20
+This point is: 东京180度, 北纬210度
+
+
+
+
+
+
