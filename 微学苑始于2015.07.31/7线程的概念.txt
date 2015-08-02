@@ -1,0 +1,468 @@
+Thread 类和Runnable 接口
+
+Java的多线程系统建立于Thread类，它的方法，它的共伴接口Runnable基础上。Thread类封装了线程的执行。既然你不能直接引用运行着的线程的状态，你要通过它的代理处理它，于是Thread 实例产生了。为创建一个新的线程，你的程序必须扩展Thread 或实现Runnable接口。
+
+Thread类定义了好几种方法来帮助管理线程。本章用到的方法如表11-1所示：
+表 11-1 管理线程的方法
+方法	意义
+getName	获得线程名称
+getPriority	获得线程优先级
+jsAlive	判定线程是否仍在运行
+join	等待一个线程终止
+run	线程的入口点.
+sleep	在一段时间内挂起线程
+start	通过调用运行方法来启动线程
+
+
+
+
+尽管主线程在程序启动时自动创建，但它可以由一个Thread对象控制。为此，你必须调用方法currentThread()获得它的一个引用，currentThread()是Thread类的公有的静态成员。它的通常形式如下：
+    static Thread currentThread( )
+该方法返回一个调用它的线程的引用。一旦你获得主线程的引用，你就可以像控制其他线程那样控制主线程。
+
+// Controlling the main Thread.
+class CurrentThreadDemo {
+    public static void main(String args[]) {
+        Thread t = Thread.currentThread();
+        System.out.println("Current thread: " + t);
+        // change the name of the thread
+        t.setName("My Thread");
+        System.out.println("After name change: " + t);
+        try {
+            for(int n = 5; n > 0; n--) {
+                System.out.println(n);
+                Thread.sleep(1000);
+            }
+        } catch (InterruptedException e) {
+            System.out.println("Main thread interrupted");
+        }
+    }
+}
+
+
+
+大多数情况，通过实例化一个Thread对象来创建一个线程。Java定义了两种方式：
+实现Runnable 接口；
+可以继承Thread类。
+
+
+实现Runnable接口
+下面的例子是创建一个新的线程并启动它运行：
+// Create a second thread.
+class NewThread implements Runnable {
+    Thread t;
+    NewThread() {
+        // Create a new, second thread
+        t = new Thread(this, "Demo Thread");
+        System.out.println("Child thread: " + t);
+        t.start(); // Start the thread
+    }
+
+    // This is the entry point for the second thread.
+    public void run() {
+        try {
+            for(int i = 5; i > 0; i--) {
+                System.out.println("Child Thread: " + i);
+                Thread.sleep(500);
+            }
+        } catch (InterruptedException e) {
+            System.out.println("Child interrupted.");
+        }
+        System.out.println("Exiting child thread.");
+    }
+}
+
+class ThreadDemo {
+    public static void main(String args[]) {
+        new NewThread(); // create a new thread
+        try {
+            for(int i = 5; i > 0; i--) {
+                System.out.println("Main Thread: " + i);
+                Thread.sleep(1000);
+            }
+        } catch (InterruptedException e) {
+           System.out.println("Main thread interrupted.");
+        }
+        System.out.println("Main thread exiting.");
+    }
+}
+
+
+
+
+
+
+
+扩展Thread
+
+创建线程的另一个途径是创建一个新类来扩展Thread类，然后创建该类的实例。当一个类继承Thread时，它必须重载run()方法，这个run()方法是新线程的入口。它也必须调用start()方法去启动新线程执行。下面用扩展thread类重写前面的程序：
+// Create a second thread by extending Thread
+class NewThread extends Thread {
+    NewThread() {
+        // Create a new, second thread
+        super("Demo Thread");
+        System.out.println("Child thread: " + this);
+        start(); // Start the thread
+    }
+
+    // This is the entry point for the second thread.
+    public void run() {
+        try {
+            for(int i = 5; i > 0; i--) {
+                System.out.println("Child Thread: " + i);
+                Thread.sleep(500);
+            }
+        } catch (InterruptedException e) {
+            System.out.println("Child interrupted.");
+        }
+        System.out.println("Exiting child thread.");
+    }
+}
+
+class ExtendThread {
+    public static void main(String args[]) {
+        new NewThread(); // create a new thread
+        try {
+            for(int i = 5; i > 0; i--) {
+                System.out.println("Main Thread: " + i);
+                Thread.sleep(1000);
+           }
+        } catch (InterruptedException e) {
+            System.out.println("Main thread interrupted.");
+        }
+        System.out.println("Main thread exiting.");
+    }
+}
+
+
+选择合适方法
+
+到这里，你一定会奇怪为什么Java有两种创建子线程的方法，哪一种更好呢。所有的问题都归于一点。Thread类定义了多种方法可以被派生类重载。对于所有的方法，惟一的必须被重载的是run()方法。这当然是实现Runnable接口所需的同样的方法。很多Java程序员认为类仅在它们被加强或修改时应该被扩展。因此，如果你不重载Thread的其他方法时，最好只实现Runnable 接口。这当然由你决定。
+
+
+
+
+有两种方法可以判定一个线程是否结束。第一，可以在线程中调用isAlive()。这种方法由Thread定义，它的通常形式如下：
+final boolean isAlive( )
+等待线程结束的更常用的方法是调用join()，描述如下：
+    final void join( ) throws InterruptedException
+// Using join() to wait for threads to finish.
+class NewThread implements Runnable {
+    String name; // name of thread
+    Thread t;
+    NewThread(String threadname) {
+        name = threadname;
+        t = new Thread(this, name);
+        System.out.println("New thread: " + t);
+        t.start(); // Start the thread
+    }
+    // This is the entry point for thread.
+    public void run() {
+        try {
+            for(int i = 5; i > 0; i--) {
+               System.out.println(name + ": " + i);
+               Thread.sleep(1000);
+            }
+        } catch (InterruptedException e) {
+            System.out.println(name + " interrupted.");
+        }
+        System.out.println(name + " exiting.");
+    }
+}
+
+class DemoJoin {
+    public static void main(String args[]) {
+        NewThread ob1 = new NewThread("One");
+        NewThread ob2 = new NewThread("Two");
+        NewThread ob3 = new NewThread("Three");
+        System.out.println("Thread One is alive: "+ ob1.t.isAlive());
+        System.out.println("Thread Two is alive: "+ ob2.t.isAlive());
+        System.out.println("Thread Three is alive: "+ ob3.t.isAlive());
+        // wait for threads to finish
+        try {
+            System.out.println("Waiting for threads to finish.");
+            ob1.t.join();
+            ob2.t.join();
+            ob3.t.join();
+        } catch (InterruptedException e) {
+            System.out.println("Main thread Interrupted");
+        }
+        System.out.println("Thread One is alive: "+ ob1.t.isAlive());
+        System.out.println("Thread Two is alive: "+ ob2.t.isAlive());
+        System.out.println("Thread Three is alive: "+ ob3.t.isAlive());
+        System.out.println("Main thread exiting.");
+    }
+}
+
+
+
+
+
+
+设置线程的优先级，用setPriority()方法，该方法也是Tread 的成员。它的通常形式为：
+    final void setPriority(int level)
+
+这 里 ， level 指 定了对所调用的线程的新的优先权的设置。Level的值必须在MIN_PRIORITY到MAX_PRIORITY范围内。通常，它们的值分别是1和10。要返回一个线程为默认的优先级，指定NORM_PRIORITY，通常值为5。这些优先级在Thread中都被定义为final型变量。
+
+你可以通过调用Thread的getPriority()方法来获得当前的优先级设置。该方法如下：
+    final int getPriority( )
+
+如果不用volatile，Java可以自由的优化循环：running的值被存在CPU的一个寄存器中，
+每次重复不一定需要复检。volatile的运用阻止了该优化，告知Java running可以改变，改变
+方式并不以直接代码形式显示。
+
+
+同步的关键是管程（也叫信号量semaphore）的概念。管程是一个互斥独占锁定的对象，或称互斥体（mutex）。在给定的时间，仅有一个线程可以获得管程。当一个线程需要锁定，它必须进入管程。所有其他的试图进入已经锁定的管程的线程必须挂起直到第一个线程退出管程。这些其他的线程被称为等待管程。一个拥有管程的线程如果愿意的话可以再次进入相同的管程。
+
+
+
+
+
+
+
+为达到上例所想达到的目的，必须有权连续的使用call( )。也就是说，在某一时刻，必须限制只有一个线程可以支配它。为此，你只需在call( ) 定义前加上关键字synchronized，如下：
+class Callme {
+    synchronized void call(String msg) {
+        ...
+
+
+
+下面是synchronized语句的普通形式：
+synchronized(object) {
+    // statements to be synchronized
+}
+
+
+
+// This program uses a synchronized block.
+class Callme {
+    void call(String msg) {
+        System.out.print("[" + msg);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            System.out.println("Interrupted");
+        }
+        System.out.println("]");
+    }
+}
+
+class Caller implements Runnable {
+    String msg;
+    Callme target;
+    Thread t;
+    public Caller(Callme targ, String s) {
+        target = targ;
+        msg = s;
+        t = new Thread(this);
+        t.start();
+    }
+
+    // synchronize calls to call()
+    public void run() {
+        synchronized(target) { // synchronized block
+            target.call(msg);
+        }
+    }
+}
+
+class go {
+    public static void main(String args[]) {
+        Callme target = new Callme();
+        Caller ob1 = new Caller(target, "Hello");
+        Caller ob2 = new Caller(target, "Synchronized");
+        Caller ob3 = new Caller(target, "World");
+
+        // wait for threads to end
+        try {
+            ob1.t.join();
+            ob2.t.join();
+            ob3.t.join();
+        } catch(InterruptedException e) {
+            System.out.println("Interrupted");
+        }
+    }
+}
+
+
+
+
+
+
+
+
+为避免轮询，Java包含了通过wait( )，notify( )和notifyAll( )方法实现的一个进程间通信机制。这些方法在对象中是用final方法实现的，所以所有的类都含有它们。这三个方法仅在synchronized方法中才能被调用。尽管这些方法从计算机科学远景方向上来说具有概念的高度先进性，实际中用起来是很简单的：
+wait( ) 告知被调用的线程放弃管程进入睡眠直到其他线程进入相同管程并且调用notify( )。
+notify( ) 恢复相同对象中第一个调用 wait( ) 的线程。
+notifyAll( ) 恢复相同对象中所有调用 wait( ) 的线程。具有最高优先级的线程最先运行。
+
+这些方法在Object中被声明，如下所示：
+    final void wait( ) throws InterruptedException
+    final void notify( )
+    final void notifyAll( )
+wait( )存在的另外的形式允许你定义等待时间。
+
+
+
+
+用Java正确的编写该程序是用wait( )和notify( )来对两个方向进行标志，如下所示：
+// A correct implementation of a producer and consumer.
+class Q {
+    int n;
+    boolean valueSet = false;
+    synchronized int get() {
+        if(!valueSet)
+            try {
+                wait();
+            } catch(InterruptedException e) {
+                System.out.println("InterruptedException caught");
+            }
+            System.out.println("Got: " + n);
+            valueSet = false;
+            notify();
+            return n;
+        }
+        synchronized void put(int n) {
+            if(valueSet)
+            try {
+                wait();
+            } catch(InterruptedException e) {
+                System.out.println("InterruptedException caught");
+            }
+            this.n = n;
+            valueSet = true;
+            System.out.println("Put: " + n);
+            notify();
+        }
+    }
+    class Producer implements Runnable {
+        Q q;
+        Producer(Q q) {
+        this.q = q;
+        new Thread(this, "Producer").start();
+    }
+    public void run() {
+        int i = 0;
+        while(true) {
+            q.put(i++);
+        }
+    }
+}
+class Consumer implements Runnable {
+    Q q;
+    Consumer(Q q) {
+        this.q = q;
+        new Thread(this, "Consumer").start();
+    }
+    public void run() {
+        while(true) {
+            q.get();
+        }
+    }
+}
+class PCFixed {
+    public static void main(String args[]) {
+        Q q = new Q();
+        new Producer(q);
+        new Consumer(q);
+        System.out.println("Press Control-C to stop.");
+    }
+}
+内部get( ), wait( )被调用。这使执行挂起直到Producer 告知数据已经预备好。这时，内部get( ) 被恢复执行。获取数据后，get( )调用notify( )。这告诉Producer可以向序列中输入更多数据。在put( )内，wait( )挂起执行直到Consumer取走了序列中的项目。当执行再继续，下一个数据项目被放入序列，notify( )被调用，这通知Consumer它应该移走该数据。
+
+下面是该程序的输出，它清楚的显示了同步行为：
+Put: 1
+Got: 1
+Put: 2
+Got: 2
+Put: 3
+Got: 3
+Put: 4
+Got: 4
+Put: 5
+Got: 5
+
+
+
+
+
+
+
+NewTread 类包含了用来控制线程执行的布尔型的实例变量suspendFlag。它被构造函数初始化为false。Run()方法包含一个监测suspendFlag 的同步声明的块。如果变量是true，wait()方法被调用以挂起线程。Mysuspend()方法设置suspendFlag为true。Myresume()方法设置suspendFlag为false并且调用notify()方法来唤起线程。最后，main()方法被修改以调用mysuspend()和myresume()方法。
+// Suspending and resuming a thread for Java2
+class NewThread implements Runnable {
+    String name; // name of thread
+    Thread t;
+    boolean suspendFlag;
+    NewThread(String threadname) {
+        name = threadname;
+        t = new Thread(this, name);
+        System.out.println("New thread: " + t);
+        suspendFlag = false;
+        t.start(); // Start the thread
+    }
+    // This is the entry point for thread.
+    public void run() {
+        try {
+            for(int i = 15; i > 0; i--) {
+                System.out.println(name + ": " + i);
+                Thread.sleep(200);
+                synchronized(this) {
+                    while(suspendFlag) {
+                        wait();
+                    }
+                }
+            }
+        } catch (InterruptedException e) {
+            System.out.println(name + " interrupted.");
+        }
+        System.out.println(name + " exiting.");
+    }
+    void mysuspend() {
+        suspendFlag = true;
+    }
+    synchronized void myresume() {
+        suspendFlag = false;
+        notify();
+    }
+}
+class SuspendResume {
+    public static void main(String args[]) {
+       NewThread ob1 = new NewThread("One");
+       NewThread ob2 = new NewThread("Two");
+       try {
+          Thread.sleep(1000);
+          ob1.mysuspend();
+          System.out.println("Suspending thread One");
+          Thread.sleep(1000);
+          ob1.myresume();
+          System.out.println("Resuming thread One");
+          ob2.mysuspend();
+          System.out.println("Suspending thread Two");
+          Thread.sleep(1000);
+          ob2.myresume();
+          System.out.println("Resuming thread Two");
+       } catch (InterruptedException e) {
+          System.out.println("Main thread Interrupted");
+       }
+       // wait for threads to finish
+       try {
+          System.out.println("Waiting for threads to finish.");
+          ob1.t.join();
+          ob2.t.join();
+       } catch (InterruptedException e) {
+           System.out.println("Main thread Interrupted");
+       }
+       System.out.println("Main thread exiting.");
+    }
+}
+
+
+
+
+
+
+
+
+
+
