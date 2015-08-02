@@ -1,0 +1,145 @@
+InetAddress类
+Java.net包中有InetAddress类的定义，InetAddress类的对象用于IP地址和域名，该类提供以下方法：
+getByName(String s)：获得一个InetAddress 类的对象，该对象中含有主机的IP地址和域名，该对象用如下格式表示它包含的信息：www.sina.com.cn/202.108.37.40；
+String getHostName()：获取InetAddress对象的域名；
+String getHostAddress()：获取InetAddress对象的IP地址；
+getLocalHost()：获得一个InetAddress对象，该对象含有本地机的域名和IP地址。
+
+import java.net.*;
+class go{
+    public static void main(String args[]){
+        try{ //以下代码通过域名建立InetAddress对象：
+            InetAddress addr = InetAddress.getByName("www.weixueyuan.net");
+            String domainName = addr.getHostName();//获得主机名
+            String IPName = addr.getHostAddress();//获得IP地址
+            System.out.println(domainName);
+            System.out.println(IPName);
+        }catch(UnknownHostException e){
+            e.printStackTrace();
+        }
+    }
+}
+
+
+
+
+
+URL类
+Java.net包有URL类，一个URL对象可以表示一个网络资源。程序利用URL对象能实现Internet寻址、网络资源的定位连接、在客户机与服务器之间直接访问等。URL类的构造方法是
+    URL(String s)
+其中，s指出网络中的一个资源。
+利用URL对象访问网上资源的方法是：先创建URL对象，如以下代码所示：
+URL myURL;
+try {
+    myURL = new URL(“http://www.weixueyuan.net:80/”);
+}catch(MalformedURLException e){
+    System.out.println(“有错的URL:”+url+e);
+}
+
+因创建URL对象可能会产生MalformedURLException异常。所以，创建URL对象的代码应出现在try…catch语句块中，以便能捕捉网址错误异常。
+URLConnection类
+
+要接收和发关信息还要用URLConnection类，程序获得一个URLConnection对象，相当于完成对指定URL的一个HTTP连接。以下是示意获得URLConnection对象的代码。
+    URL mu = new URL(“http://www.sun.com/”);//先要创建一个URL对象
+    URLConnection muC = mu.openConnection();//获得URLConnection对象
+上述代码说明，先要创建一个URL对象，然后利用URL对象的openConnection()方法，从系统获得一个URLConnection对象。程序有了URLConnection对象后，就可使用URLConnection类提供的以下方法获得流对象和实现网络连接：
+getOutputStream()：获得向远程主机发送信息的OutputStream流对象；
+getInputStream()：获得从远程主机获取信息的InputStream流对象。有了网络连接的输入和输出流，程序就可实现远程通信；
+connect()：设置网络连接。
+信息的发送和接收
+
+发送和接收信息要获得流对象，并由流对象创建输入或输出数据流对象。然后，就可以用流的方法访问网上资源。
+
+参见【例 13-2】程序中的方法readByURL()，该方法说明已知网址读取网页内容的过程。方法利用网址参数创建一个URL对象url，接着利用对象url的openConnect()方法，获得URLConnection对象tc，用对象tc的connect()方法建立网络连接，接着获得网络连接的InputStreamReader类对象in，将对象in，转化成为BufferedRead对象dis，改为缓冲式输入。最后，用对象dis的readLine()方法完成读取网络文本数据。
+
+如同本地数据流一样，网上资源使用结束后，数据流也应及时关闭。例如，代码
+    dis.close();
+关闭先前代码建立的流dis。
+
+
+public void readByURL(String urlName){
+        try{
+            URL url = new URL(urlName);//由网址创建URL对象
+            URLConnection tc = url.openConnectin();//获得URLConnection对象
+            tc.connect();//设置网络连接
+            InptStreamReader in = new InputStreamReader(tc.getInputStream());
+            BufferedReader dis = new BufferedReader(in);//采用缓冲式输入
+            String inline;
+            while((inline = dis.readLine())!=null){
+                showArea.append(inline +”\n”);
+            }
+            dis.close();//网上资源使用结束后，数据流及时关闭
+        }catch(MalformedURLException e){
+            e.printStackTrace();
+       }
+        catch(IOException e){e.printStacktrace();}
+        /*访问网上资源可能产生MalformedURLException和IOException异常*/
+    }
+
+
+规定：端口号0~1023供系统专用。例如，HTTP协议在端口80，telnet协议在端口23。端口1024~65535供应用程序使用。
+
+
+当Client程序和Server程序需要通信时，可以用Socket类建立套接字连接。
+双方实现通信有流式socket和数据报式socket两种可选方式：
+流式socket是有连接的通信，即TCP(Transmission Control Protocol)、
+数据报式socket是无连接的通信，即UDP(User Datagram Protocol)、
+
+【例 13-4】与例10.3 Client端应用程序对应的Server端应用程序。程序在4441端口监听，当检测到有客户机请求时，产生一个内为“客户，你好，我是服务器”的字符串输出到客户端。
+import java.io.*;import java.net.*;
+public class Server{
+    public static void main(String args[]){
+        ServerSocket server = null;
+        Socket you = null;String s = null;
+        DataOutputStream out = null;
+        DataInputStream in = null;
+        try{
+            server = new ServerSocket(4441);
+        }catch(IOException e1){
+            system.out.println(“ERROR:” +e1);
+        }
+        try{
+            you = server.accept();
+            in = new DataInputStream(you.getInputStream());
+            out = new DataOutputStream(you. getOutputStream());
+            while(true){
+                s = in.readUTF();
+                if(s!=null) break;
+            }
+            out.writeUTF(“客户，你好，我是服务器”);
+            out.close();
+        }
+        catch(IOException e){System.out.println(“ERROR:”+e);}
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
