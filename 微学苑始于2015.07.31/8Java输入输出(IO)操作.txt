@@ -5,9 +5,7 @@ System.err（标准错误输出）：通常写往显示器。
 
 
 
-
-
-
+Reader和Writer是java.io包中所有字符流的父类。
 
 
 

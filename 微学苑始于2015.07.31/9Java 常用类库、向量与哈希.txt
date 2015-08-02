@@ -1,0 +1,123 @@
+Java 常用包的简单介绍如下：
+java.lang 包：主要含有与语言相关的类。java.lang 包由解释程序自动加载，不需要显示说明。
+java.io 包：主要含有与输入/输出相关的类，这些类提供了对不同的输入和输出设备读写数据的支持，这些输入和输出设备包括键盘、显示器、打印机、磁盘文件等。
+java.util 包：包括许多具有特定功能的类，有日期、向量、哈希表、堆栈等，其中 Date类支持与时间有关的操作。
+java.swing 包和 java.awt 包：提供了创建图形用户界面元素的类。通过这些元素，编程者可以控制所写的 Applet 或 Application 的外观界面。包中包含了窗口、对话框、菜单等类。
+java.net 包：含有与网络操作相关的类，如 TCP Scokets、URL 等工具。
+java.applet 包：含有控制 HTML 文档格式、应用程序中的声音等资源的类，其中 Applet类是用来创建包含于 HTML 的 Applet 必不可少的类。
+java.beans 包：定义了应用程序编程接口（API），Java Beans 是 Java 应用程序环境的中性平台组件结构
+
+
+
+定义Java类时如果没有显示的指明父类，那么就默认继承了 Object 类
+在Java中，只有基本类型不是对象，例如数值、字符和布尔型的值都不是对象，所有的数组类型，不管是对象数组还是基本类型数组都是继承自 Object 类。
+
+
+Java语言包（java.lang）定义了Java中的大多数基本类，由Java语言自动调用，不需要显示声明
+
+Math类提供了常用的数学运算方法以及Math.PI和Math.E两个数学常量。该类是final的，不能被继承，类中的方法和属性全部是静态，不允许在类的外部创建Math类的对象。因此，只能使用Math类的方法而不能对其作任何更改。
+
+
+字符串是字符的序列。在 Java 中，字符串无论是常量还是变量都是用类的对象来实现的。java.lang 提供了两种字符串类：String 类和 StringBuffer 类。
+
+
+Java 的日期和时间类位于 java.util 包中
+Date 类是 Java 中的日期时间类，其构造方法比较多，下面是常用的两个：
+Date()：使用当前的日期和时间初始化一个对象。
+Date(long millisec)：从1970年01月01日00时（格林威治时间）开始以毫秒计算时间，计算 millisec 毫秒。
+
+请看一个显示日期时间的例子：
+import java.util.Date;
+public class Demo{
+    public static void main(String args[]){
+        Date da=new Date();  //创建时间对象
+        System.out.println(da); //显示时间和日期
+        long msec=da.getTime();
+        System.out.println("从1970年1月1日0时到现在共有：" + msec + "毫秒");
+    }
+}
+运行结果：
+Mon Feb 05 22:50:05 CST 2007
+从1970年1月1日0时到现在共有：1170687005390 毫秒
+
+
+Date 对象表示时间的默认顺序是星期、月、日、小时、分、秒、年。若需要修改时间显示的格式可以使用“SimpleDateFormat(String pattern)”方法。
+
+例如，用不同的格式输出时间：
+import java.util.Date;
+import java.text.SimpleDateFormat;
+public class Demo{
+    public static void main(String args[]){
+        Date da=new Date();
+        System.out.println(da);
+        SimpleDateFormat ma1=new SimpleDateFormat("yyyy 年 MM 月 dd 日 E 北京时间");
+        System.out.println(ma1.format(da));
+        SimpleDateFormat ma2=new SimpleDateFormat("北京时间：yyyy 年 MM 月 dd 日 HH 时 mm 分 ss 秒");
+        System.out.println(ma2.format(-1000));
+    }
+}
+运行结果：
+Sun Jan 04 17:31:36 CST 2015
+2015 年 01 月 04 日 星期日 北京时间
+北京时间：1970 年 01 月 01 日 07 时 59 分 59 秒
+
+
+
+Calendar 类
+抽象类 Calendar 提供了一组方法，允许把以毫秒为单位的时间转换成一些有用的时间组成部分。Calendar 不能直接创建对象，但可以使用静态方法 getInstance() 获得代表当前日期的日历对象，如：
+    Calendar calendar=Calendar.getInstance();
+
+
+GregorianCalendar 类
+GregorianCalendar 是一个具体实现 Calendar 类的类，该类实现了公历日历。Calendar 类的 getInstance() 方法返回一个 GregorianCalendar，它被初始化为默认的地域和时区下的当前日期和时间。
+
+
+
+Vector（向量）是 java.util 包中的一个类，该类实现了类似动态数组的功能。
+
+向量和数组相似，都可以保存一组数据（数据列表）。但是数组的大小是固定的，一旦指定，就不能改变，而向量却提供了一种类似于“动态数组”的功能，向量与数组的重要区别之一就是向量的容量是可变的。
+
+
+
+哈希表的创建也可以通过 new 操作符实现。其语句为：
+    HashTable has=new HashTable();
+
+【例 8-12】哈希表的遍历。
+//********** ep8_12.java **********
+import java.util.*;
+class ep8_12{
+    public static void main(String args[]){
+        Hashtable has=new Hashtable();
+        has.put("one",new Integer(1));
+        has.put("two",new Integer(2));
+        has.put("three",new Integer(3));
+        has.put("four",new Double(12.3));
+        Set s=has.keySet();
+        for(Iterator<String> i=s.iterator();i.hasNext();){
+            System.out.println(has.get(i.next()));
+        }
+    }
+}
+运行结果：
+2
+1
+3
+12.3
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
