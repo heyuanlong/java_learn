@@ -1,0 +1,4 @@
+java中每一个类都有一个finalize（）方法用于释放资源。
+该方法的原始声明格式为
+protected void finalize（）throws throwable；
+可以重写该方法用于....

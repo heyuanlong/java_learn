@@ -1,0 +1,3 @@
+函数抛出异常：
+c++:fun()throw(exception)加括号
+java:jun()throw exception不加

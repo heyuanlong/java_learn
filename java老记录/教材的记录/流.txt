@@ -1,0 +1,64 @@
+面向字符的流——Reader和Writer类
+绝大多数程序使用Reader和Writer这两个抽象类的一系列子类来读入和写出文本信息
+面向字节的流——InputStream和OutputStream类
+InputStream和OutputStream是用来处理8位字节流的抽象基类，程序使用这两个类的子类来读写8位的字节信息。这种流通常是用来读写诸如图片，声音之类的二进制数据
+
+throws IOException；
+
+按照流是否直接与特定的地方(如磁盘、内存、设备等)相连，分为节点流和处理流两类。
+    节点流：可以从或向一个特定的地方（节点）读写数据。如FileReader
+
+　　处理流：是对一个已存在的流的连接和封装，通过所封装的流的功能调用实现数据读写。如BufferedReader。处理流的构造方法总是要带一个其他的流对象做参数。一个流对象经过其他流的多次包装，称为流的链接。
+
+需要注意的是，写的字节是连续的，一个数据接着一个数据，中间没有分隔符，所以应该记住写的数据类型，个数等情况，以便将来利用只知道是int数据而不知道有多少个时，可以如下程序，用抛出EOFException异常跳出循环。
+try
+    	{
+    	DataInputStream instr = new DataInputStream(
+          new BufferedInputStream(new FileInputStream(fileName)));
+        try
+        {
+          while ( true )
+          sum += instr.readInt();
+        }
+        catch ( EOFException  eof )
+        {
+          System.out.println( "The sum is: " + sum );
+          instr.close();
+        }
+    }
+    catch ( IOException iox )
+    {
+    	System.out.println("IO Problems with " + fileName ); }
+    }
+
+
+、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、
+
+ BufferedWriter writer;
+ writer = new BufferedWriter(new FileWriter("C:\\hello.txt",true));//追加
+  writer.write("15465");
+  writer.newLine();//换行
+
+
+String line;
+  try {
+	BufferedReader in=new BufferedReader(new FileReader("C:\\hello.txt"));
+	line=in.readLine();
+	while(line!=null)
+            {
+		System.out.println(line);
+		line=in.readLine();
+		}
+	in.close();
+
+
+int c;
+ try {
+	BufferedReader in=new BufferedReader(new FileReader("C:\\hello.txt"));
+
+	while((c=in.read())!=-1){
+		System.out.print((char)c);
+	}
+
+
+

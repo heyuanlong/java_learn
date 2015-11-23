@@ -1,0 +1,13 @@
+            ScriptEngineManager manager = new ScriptEngineManager();  
+            ScriptEngine engine = manager.getEngineByName("javascript");  
+            engine.eval(new java.io.FileReader("script_test.js")); 
+ 
+script_test.js 文件需要放在工程文件目录里才行！  
+ engine.eval(new java.io.FileReader("src/script_test.js"));  
+//或者工程文件的目录的目录下，要指定下一个目录了  
+
+javax.script包是一个相对较小、较为简单的API。ScriptEngineManager对象可以通过jar文件服务查找机制来找到脚本引擎。它也可以实例化ScriptEngine对象，ScriptEngine对象可以解释指定的脚本语言所编写的脚本。使用此API最简单的方法如下：  
+  
+（1）创建一个ScriptEngineManager对象；  
+（2）从ScriptEngineManager创建一个ScriptEngine对象；  
+（3）使用ScriptEngine的eval方法来赋值脚本。 

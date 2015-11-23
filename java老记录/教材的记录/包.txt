@@ -1,0 +1,35 @@
+/////////////////////////////////同一目录下
+import kkj.*;
+class  ThreadDemo
+{
+	public static void main(String[] args) 
+	{
+		Clock  myClock=new Clock();
+	      myClock.setTime(8,30,30);
+	      myClock.showTime();
+               System.out.println(myClock.toString());
+	}
+}
+///////////////////////////////////////////////////////////
+package kkj;
+public class Clock {
+	public Clock()
+	{
+		a=10;b=11;c=12;
+	}
+	public void setTime(int k,int u,int y)
+	{
+		a=k;
+		b=u;
+		c=y;
+	}
+	public void showTime()
+	{
+		System.out.println(" "+a+b+c);
+	}
+	public String toString()
+	{
+		return (super.toString()+"     "+"sdfuhsduhf");
+	}
+int a,b,c;
+}

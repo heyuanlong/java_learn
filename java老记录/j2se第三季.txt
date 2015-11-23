@@ -1,0 +1,82 @@
+1.
+异常，不管try是否出现异常，finally都要执行，既是有return语句，也会执行finally
+
+2.一个方法规定了要抛出异常，那么调用这个方法时，就得有try或throws
+自定义异常可以分为受检异常和非受检异常。
+
+3.
+eclipse调试
+f5 单步跳入
+f6 单步跳过
+f7 单步返回
+f8 继续，执行到下一个断点
+ctrl+r到光标处
+
+
+4.
+按住ctrl+类，跳到源码
+
+5.
+StringBuffer类 多线程访问时使用，效率较低，线程安全
+StringBuilder类单线程访问时使用，效率更高，线程不安全
+synchronized关键字表示同步
+
+6.
+Date date=new Date();
+
+Calendar c=Calendar.getInstance();
+int year =c.get(Calendar.YEAR);
+
+DateFormat和SimpleDateFormat更方便
+
+
+7.
+对象比较器
+对象clone，实现clonable接口，重写clone方法
+
+
+
+
+8.第十五讲开始未看
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

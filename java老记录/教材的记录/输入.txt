@@ -1,0 +1,6 @@
+	/////////////////////////////////////////////////
+       String s=new String(); 
+       Scanner kkk=new Scanner(System.in); 
+       s=kkk.next(); 
+       System.out.print(s);
+	   ////////////////////////////////////////////////////  

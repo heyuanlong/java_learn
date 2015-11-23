@@ -1,0 +1,2 @@
+1.是不处理基本数据类型的。
+2.Enumeration类是不能用于ArrayList对象的

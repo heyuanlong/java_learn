@@ -1,0 +1,95 @@
+抽象方法：在类中没有方法体的方法，就是抽象方法。
+抽象类：含有抽象方法的类就叫抽象类（必须将这个类声明为抽象类）。也可含有非抽象方法。
+子类若没有重写所有抽象方法，则还得将子类声明为抽象类
+
+abstract：抽象的类和方法都得加上它；
+
+
+
+
+
+完成接口的类必须实现接口中的所有抽象方法，否则该类需要声明为abstract
+可以声明接口类型的变量（或数组），并用它来访问子类对象
+允许实现多个接口
+接口可以继承一个或多个接口
+静态是不支持多态的
+接口也可以是泛型的
+
+使用：机器1->接口->机器2
+
+
+
+
+
+
+
+
+可以声明多个泛型参数类型，比如<T, P,Q…>，同时还可以嵌套泛型，例如：<List<String>>
+
+可以将类泛型化。方法也可以被泛型化，不管它们定义在其中的类是不是泛型化的。
+泛型类：<T>放在类名后面
+泛型方法：<T>放在返回类型前面
+ public class getObj<T>
+   {
+            private T myObj ;        
+            public T getObj() {
+                return myObj;
+            }
+ 
+            public void setObj<T obj> {
+                 myObj = obj;
+              }
+     }
+
+public <T> T ifThenElse(boolean b, T first, T second) {
+return b ? first : second;
+}
+
+
+
+
+
+扩展
+1、extends语句
+使用extends语句将限制泛型参数的适用范围。例如：
+<T extends collection> ，则表示该泛型参数的使用范围是所有实现了collection接口的calss。如果传入一个<String>则程序编译出错。
+2、super语句
+super语句的作用与extends一样，都是限制泛型参数的适用范围。区别在于，super是限制泛型参数只能是指定该class的上层父类。
+例如<T super List>，表示该泛型参数只能是List和List的上层父类。
+3、通配符
+ GenericFoo<? extends Object>等价于GenericFoo<?>
+ GenericFoo<? extends List> foo = null;
+ GenericFoo<? super List> ge= null;
+
+
+使用通配符的目的是为了解决泛型参数被限制死了不能动态根据实例来确定的缺点。
+举个例子：public class SampleClass < T extends S> {…}
+假如A，B，C，…Z这26个class都实现了S接口。我们使用时需要使用到这26个class类型的泛型参数。那实例化的时候怎么办呢？依次写下
+SampleClass<A> a = new SampleClass();
+SampleClass<B> a = new SampleClass();
+…
+SampleClass<Z> a = new SampleClass();
+这显然很冗余，还不如使用Object而不使用泛型，呵呵，是吧？
+别着急，咱们使用通配符，就OK了。
+SampleClass<? Extends S> sc = new SampleClass();
+ 
+只需要声明一个sc变量，很方便把！
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

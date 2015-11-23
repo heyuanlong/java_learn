@@ -1,0 +1,73 @@
+1.声明<%!   %>jsp声明片段（一般不用）
+2.表达式<%=表达式%>:当前时间<%=new java.util.Date()%>
+3.脚本<%   %>jsp脚本片段
+
+
+三种指令元素
+page include taglib
+1.page指令指明与jsp容器的沟通方式，
+<%@ 
+language="java" 
+import="java.util.Random"
+import="java.util.Arrays"
+contentType="text/html;charset=UTF-8"
+pageEncoding="UTF-8"
+...
+..
+.
+%>
+
+2.include指令是在jsp页面被转换成servlet时将指定的文件包含进来
+<%@include file="fileurl" %>
+(include 静态包含，只能包含静态的资源)
+
+例如<%@include file="title.jsp" %>
+包含的title.jsp的输出内容
+
+3.
+taglib
+
+
+
+jsp动作元素
+<jsp:include>(动态包含,生成分离的java文件)
+<jsp:include page="###.jsp">
+	<jsp:param name="name" value="zhi"/>
+	<jsp:param name="name1" value="zhi1"/>
+</jsp:include>
+
+获取传参：String name=request.getParameter("name");
+
+
+<jsp:forward>
+转发用户请求（会带请求数据,url不变）
+<jsp:forward page="##.jsp"></jsp:forward>
+
+
+
+//创建对象，调用默认的构造方法，要求必须有默认的构造方法
+<jsp:usebean id="person" class="com.vince.bean.Person">
+</jsp:usebean>
+//设置对象的属性
+<jsp:setProperty name="person" property="name" value="xiaobao"/>
+//获取对象的属性
+<jsp:getProperty name="person" property="name"/>
+
+
+post和get处理乱码方式不一样
+get：
+A.修改的tomcat的配置文件server.xml
+B.js中使用encodeURI，后台在转换过来
+C.在后台直接转换
+
+post：request.setCharacterEncoding("UTF-8");
+
+
+到javaweb第三季第七讲->stop
+
+
+
+
+
+
+

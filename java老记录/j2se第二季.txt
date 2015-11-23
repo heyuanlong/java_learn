@@ -1,0 +1,98 @@
+1.
+import java.lang.String;
+String si=new String("aa");
+
+2.
+封装：
+属性的封装（把属性定为私有)
+方法的封装
+类的封装
+组件的封装
+模块化的封装
+系统级的封装
+....
+
+3.
+java的构造方法也是可以有多个的（多个时，最好要定义个空参数的构造方法）
+
+4.
+方法重载，一个类里，方法名字相同，参数不同
+
+5.
+匿名对象就是定义一个没有名称的对象，只能使用一次。
+new Leiduixiang().fangfa();
+
+6.
+equals:表示比较两个字符串对象的值是否相等
+for(String name:names)
+{
+	System.out.print(name+" ");
+}
+
+7.
+可变参数(只能有一个可变参数)
+method(leixing... name){}
+
+8.
+构造块：在构造对象时调用，在类中的代码块，先于构造函数自动调用
+静态块：static{},在类加载时执行，仅执行一次
+
+9.
+重写：返回值，方法名，参数完全一致。
+父类的权限和范围是必须比子类大的
+
+10.
+final关键字声明一个常量（声明时赋值或，构造方法中赋值）
+final类和方法不能被继承或重写
+
+11.
+抽象类中有抽象方法和非抽象方法
+abstract class women{
+	private int a;
+	public void kk(){}
+	public abstract void say();
+}
+
+12.
+interface jiekou{}
+接口使用implements
+接口可以继承多个接口extends
+在接口中定义的属性默认且必须都是常量
+
+
+13.
+多态分为两类：重载和重写
+
+14.
+父类就是大，子类就是小
+对象 instanceof 类型 返回boolean类型值，判断类型
+
+15.
+可以把接口作为类中的一个属性（组合）
+
+16.
+toString返回对象的字符串表示 
+print(duixiang);默认调用toString方法
+if(duixiang == duixiang2);默认调用equals方法
+
+17.
+若一个方法的参数是object类型，那么所有对象都可以传给这个方法
+
+18.
+interface doll{}
+doll d=new shixiandoll();
+
+19.
+内部类编译后为outer.inner.class;
+内部类有效地实现了“多重继承”、
+
+20.
+doc下包的目录要手动创建。
+
+
+
+
+
+
+
+

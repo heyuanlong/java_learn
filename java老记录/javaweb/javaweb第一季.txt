@@ -1,0 +1,4 @@
+1.
+java的配置文件一般是properties文件
+
+2.

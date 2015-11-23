@@ -1,0 +1,121 @@
+1.java可以多层继承（就是父类还有父类），但不可以多重继承。
+2.System.out.println("2"+(2+3));输出25
+  System.out.println("2"+2+3);输出223
+  System.out.println(2+3+"2");输出52
+
+3.System.out.println((char)('a'+1));//输出 b		
+  System.out.println((char)('你'+19));//unicode国际标准码表。输出 佳
+
+4.System.out.println(Integer.MAX_VALUE);//输出 2147483647	
+
+5.
+		xiaoqiang:for (int x=0; x<3 ;x++ )
+		{
+			wangcai:for (int y=0; y<4 ; y++)
+			{
+				System.out.println("x="+x);
+				break wangcai;
+			}
+			
+		}//输出
+x=0
+x=1
+x=2
+
+6.		xiaoqiang:for (int x=0; x<3 ;x++ )
+		{
+			wangcai:for (int y=0; y<4 ; y++)
+			{
+				System.out.println("x="+x);
+				continue xiaoqiang;
+			}
+			
+		}//输出
+x=0
+x=1
+x=2
+
+7.System.out.println(arr);//[I@1fb8ee3  @左边是实体的类型。 @右边是实体的哈希值。
+
+8.
+		int[][] arr = {{3,1,7},{5,8,2,9},{4,1}};//是不规则的
+
+		for(int x=0; x<arr.length; x++)
+		{
+			for(int y=0; y<arr[x].length; y++)
+			{
+//				System.out.print(arr[x][y]+",");
+				sum += arr[x][y];
+				
+			}
+		}
+
+9.
+int[] x,y[];
+int[] k={1,2,3};
+int[] arr[]={{2,3},{4,4,4}};
+
+10.静态代码块。
+随着类的加载而执行。而且只执行一次。
+
+11.
+//饿汉式
+class Single//类一加载，对象就已经存在了。
+{
+	private static Single s = new Single();
+
+	private Single(){}
+
+	public static Single getInstance()
+	{
+		return s;
+	}
+}
+
+
+//懒汉式
+class Single2//类加载进来，没有对象，只有调用了getInstance方法时，才会创建对象。
+			//延迟加载形式。 
+{
+	private static Single2 s = null;
+
+	private Single2(){}
+
+	public static Single2 getInstance()
+	{
+		if(s==null)
+			s = new Single2();
+		return s;
+	}
+}
+
+12.
+int k=20;
+System.out.println("demo ok"+k);
+输出;demo ok20
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

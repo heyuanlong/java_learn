@@ -1,0 +1,110 @@
+System.out.println("hhh");//换行
+System.out.print("hhh");//不换行
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//第一个框架程序
+import java.awt.*;
+public class SimpleFrame{
+	public static void main(String args[]){
+		Frame f=new Frame("hello");
+		f.add(new Button("第一个框架程序"));
+		f.setSize(100, 100);
+		f.setVisible(true);	
+	}
+	}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+import java.awt.*;
+public class SimpleFrame{
+	public static void main(String args[]){
+		Frame f=new Frame("hello");
+		Panel p=new Panel();
+		p.add(new Button("press me"));
+		p.setBackground(Color.BLUE);
+		f.add(p);
+		f.setSize(100, 100);
+		f.setVisible(true);	
+	}
+	}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+import java.awt.*;
+import java.awt.geom.*;
+import javax.swing.*;
+
+public class SimpleFrame{
+	public static void main(String args[]){
+	EventQueue.invokeLater(new Runnable()//处理事件
+	{
+		public void run()
+		{
+		DrawFrame frame = new DrawFrame();.//构造框架窗口
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//关闭窗口
+		frame.setVisible(true);//显示窗口
+		}
+	});
+	}
+}
+class DrawFrame extends JFrame//框架
+{
+    public DrawFrame()
+    {
+    	setTitle("graphics");//标题
+    	setSize(DEFAUL_WIDTH,DEFAUL_HEIGHT);//框架大小
+    	DrawComponent component = new DrawComponent();//构造内容窗口
+    	add(component);//把内容窗口加入框架
+    }
+    public static final int DEFAUL_WIDTH = 400;
+    public static final int DEFAUL_HEIGHT = 400;
+}
+class DrawComponent extends JComponent///内容窗口
+{
+	public void paintComponent(Graphics g)//paintComponent方法是自动调用的
+	{
+		Graphics2D g2 = (Graphics2D)g;
+		double leftx=100;
+		double topy=100;//左上角坐标
+		
+		double width=200;
+		double height=150;
+		Rectangle2D rect = new Rectangle2D.Double(leftx,topy,width,height);//矩形
+		g2.draw(rect);
+
+		Ellipse2D ellipse=new Ellipse2D.Double();///椭圆或圆
+		ellipse.setFrame(rect);
+		g2.draw(ellipse);
+								 //开始坐标到线尾坐标
+		g2.draw(new Line2D.Double(leftx,topy,leftx+width,topy+height));//直线
+		
+		double centerx = rect.getCenterX();
+		double centery = rect.getCenterY();
+		double radius = 150;
+		Ellipse2D circle = new Ellipse2D.Double();//椭圆或圆
+		for(int i=0;i<30;++i)
+		{							//圆心，宽，和  高
+		circle.setFrameFromCenter(centerx,centery,centerx+radius-10,centery+radius-10+i);
+		g2.draw(circle);
+		}
+	}
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
